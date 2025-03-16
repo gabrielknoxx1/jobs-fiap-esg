@@ -1,4 +1,4 @@
- package br.com.fiap.jobs_fiap_esg.screens
+package br.com.fiap.jobs_fiap_esg.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,16 +15,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.jobs_fiap_esg.components.BottomNavBar
+import br.com.fiap.jobs_fiap_esg.data.vagaDescricao
+import androidx.compose.runtime.remember
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JobDetailScreen(navController: NavController) {
     // Recuperar o jobId dos argumentos de navegação
-    val jobId = navController.currentBackStackEntry?.arguments?.getString("jobId")
+    val jobIdString = navController.currentBackStackEntry?.arguments?.getString("jobId") ?: "1"
+    val jobId = jobIdString.toIntOrNull() ?: 1
+
+    val vaga = remember(jobId) {
+        vagaDescricao.find { it.id == jobId } ?: vagaDescricao.first()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Caixa") },
+                title = { Text(vaga.titulo) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -64,7 +72,7 @@ fun JobDetailScreen(navController: NavController) {
         ) {
             // Seção da empresa
             Text(
-                text = "Empresa: Mercado Dia",
+                text = "Empresa: ${vaga.empresa}",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -74,38 +82,37 @@ fun JobDetailScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Presencial")
-                Text("CLT")
-                Text("R$ 1.700/mês")
+                Text(vaga.tipoTrabalho)
+                Text(vaga.tipoContrato)
+                Text(vaga.salario)
             }
             
             // Descrição
             JobSection(title = "Descrição") {
-                Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nec tortor in lectus cursus luctus et at purus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Morbi eget magna sit amet dolor condimentum convallis. Fusce eget commodo neque, ut malesuada dui. Sed vitae enim pharetra, convallis erat a, commodo quam. Sed id est ac nunc rhoncus tempus ac ac nibh. Nam non odio sodales, mattis quam a, facilisis diam."
-                )
+                vaga.descricao.forEach { paragrafo ->
+                    Text(text = paragrafo)
+                }
             }
             
             // Requisitos
             JobSection(title = "Requisitos") {
-                ListItem(text = "Requisito 1")
-                ListItem(text = "Requisito 2")
-                ListItem(text = "Requisito 3")
+                vaga.requisitos.forEach { requisito ->
+                    ListItem(text = requisito)
+                }
             }
             
             // Benefícios
             JobSection(title = "Benefícios") {
-                ListItem(text = "Benefício 1")
-                ListItem(text = "Benefício 2")
-                ListItem(text = "Benefício 3")
+                vaga.beneficios.forEach { beneficio ->
+                    ListItem(text = beneficio)
+                }
             }
             
             // Atividades
             JobSection(title = "Atividades") {
-                BulletListItem(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sed ex ligula. Nam posuere ex quis.")
-                BulletListItem(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sed ex ligula. Nam posuere ex quis.")
-                BulletListItem(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sed ex ligula. Nam posuere ex quis.")
-                BulletListItem(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sed ex ligula. Nam posuere ex quis.")
+                vaga.atividades.forEach { atividade ->
+                    BulletListItem(text = atividade)
+                }
             }
         }
     }

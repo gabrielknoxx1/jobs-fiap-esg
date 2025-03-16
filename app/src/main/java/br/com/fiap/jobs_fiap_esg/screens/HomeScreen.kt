@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.fiap.jobs_fiap_esg.data.Vaga
 import br.com.fiap.jobs_fiap_esg.data.vagasDisponiveis
 import br.com.fiap.jobs_fiap_esg.components.SearchBar
 import br.com.fiap.jobs_fiap_esg.components.VagaItem
