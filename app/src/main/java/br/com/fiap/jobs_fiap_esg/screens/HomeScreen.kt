@@ -10,6 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,6 +26,19 @@ import br.com.fiap.jobs_fiap_esg.navigation.Screen
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
+    var searchQuery by remember { mutableStateOf("") }
+    val vagasFiltradas = remember(searchQuery) {
+        if (searchQuery.isEmpty()) {
+            vagasDisponiveis
+        } else {
+            vagasDisponiveis.filter { vaga ->
+                vaga.titulo.contains(searchQuery, ignoreCase = true) ||
+                        vaga.zona.contains(searchQuery, ignoreCase = true) ||
+                        vaga.bairro.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -36,7 +53,7 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
 
         SearchBar(
             hint = "Buscar vagas",
-            onSearch = { /* Implementar busca */ }
+            onSearch = { query -> searchQuery = query }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -44,10 +61,10 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(vagasDisponiveis) { vaga ->
+            items(vagasFiltradas) { vaga ->
                 VagaItem(
                     vaga = vaga,
-                    onClick = { 
+                    onClick = {
                         // Navegar para detalhes da vaga usando o NavController
                         navController.navigate(Screen.JobDetail.createRoute(vaga.id.toString()))
                     }
