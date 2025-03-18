@@ -1,5 +1,6 @@
 package br.com.fiap.jobs_fiap_esg.screens
 
+import android.app.AlertDialog
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -7,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,7 +18,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.jobs_fiap_esg.components.BottomNavBar
 import br.com.fiap.jobs_fiap_esg.data.vagaDescricao
-import androidx.compose.runtime.remember
+import br.com.fiap.jobs_fiap_esg.data.vagasDisponiveis
+import br.com.fiap.jobs_fiap_esg.data.vagasSalvas
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,10 +28,20 @@ fun JobDetailScreen(navController: NavController) {
     // Recuperar o jobId dos argumentos de navegação
     val jobIdString = navController.currentBackStackEntry?.arguments?.getString("jobId") ?: "1"
     val jobId = jobIdString.toIntOrNull() ?: 1
-
     val vaga = remember(jobId) {
         vagaDescricao.find { it.id == jobId } ?: vagaDescricao.first()
     }
+
+   val builder: AlertDialog.Builder = AlertDialog.Builder( navController.context)
+    builder
+        .setMessage("Candidatura enviada com sucesso!")
+        .setTitle("Parabens!")
+
+    val dialog: AlertDialog = builder.create()
+
+
+
+
 
     Scaffold(
         topBar = {
@@ -45,17 +59,16 @@ fun JobDetailScreen(navController: NavController) {
         },
         bottomBar = {
             Column {
-                Button(
-                    onClick = { /* Lógica para enviar candidatura */ },
-                    modifier = Modifier
+                Button(onClick = {
+                        vagasSalvas.add(jobId)
+                        dialog.show()
+
+                    }, modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(
+                        .height(56.dp), colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF6750A4)
-                    ),
-                    shape = MaterialTheme.shapes.medium
-                ) {
+                    ), shape = MaterialTheme.shapes.medium) {
                     Text("Enviar candidatura", fontSize = 16.sp)
                 }
                 BottomNavBar(navController = navController)
@@ -117,6 +130,8 @@ fun JobDetailScreen(navController: NavController) {
         }
     }
 }
+
+
 
 @Composable
 fun JobSection(title: String, content: @Composable () -> Unit) {

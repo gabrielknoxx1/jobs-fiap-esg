@@ -1,5 +1,10 @@
 package br.com.fiap.jobs_fiap_esg.data
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 data class Vaga(
     val id: Int,
     val titulo: String,
@@ -14,8 +19,6 @@ val vagasDisponiveis = listOf(
     Vaga(4, "Auxiliar de escritório", "Zona Central", "República"),
     Vaga(5, "Assistente administrativo", "Zona Oeste", "Lapa")
 )
-
-
 data class VagaDescricao(
     val id: Int,
     val titulo: String,
@@ -38,7 +41,8 @@ val vagaDescricao = listOf(
         tipoContrato = "CLT",
         salario = "R$ 1.700/mês",
         descricao = listOf(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nec tortor in lectus cursus luctus et at purus. Interdum et malesuada fames ac ante ipsum primis in faucibus."
+            "O empacotador é responsável por embalar e arrumar as mercadorias nas prateleiras, realizar a reposição de estoque, auxiliar na abertura e fechamento da loja, realizar a limpeza e organização do setor de vendas. O empacotador também é responsável por atender aos clientes e sanar dúvidas sobre os produtos e serviços da loja. Além disso, o profissional deve ser capaz de trabalhar em equipe e realizar outras tarefas que sejam necessárias para o bom funcionamento da loja. O cargo exige pontualidade, responsabilidade e habilidades de comunicação. O horário de trabalho é de segunda a sexta-feira, das 8h às 18h, com uma hora de almoço. O salário é de R$ 1.700,00 por mês. O contratado receberá vale-transporte, vale-refeição e plano de saúde.",
+            "."
         ),
         requisitos = listOf(
             "Pontualidade", 
@@ -62,19 +66,20 @@ val vagaDescricao = listOf(
         empresa = "Mercado Dia",
         tipoTrabalho = "Presencial",
         tipoContrato = "CLT", 
-        salario = "R$ 1.700/mês",
+        salario = "R$ 1.900/mês",
         descricao = listOf(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nec tortor in lectus cursus luctus et at purus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Morbi eget magna sit amet dolor condimentum convallis."
+
+            "O caixa de mercado é responsável por registrar as compras dos clientes, manusear pagamentos em dinheiro ou cartão, e fornecer um atendimento cordial. É essencial ter agilidade, atenção aos detalhes e habilidades de comunicação."
         ),
         requisitos = listOf(
             "Pontualidade", 
-            "Saber fazer contas rapidamente", 
+            "Agilidade",
             "Ser educado (a) com clientes"
         ),
         beneficios = listOf(
-            "Benefício 1",
-            "Benefício 2",
-            "Benefício 3"
+            "Vale Transporte",
+            "Vale Refeição",
+            "Plano de Saude"
         ),
         atividades = listOf(
             "Atender cliente no caixa de seg a sab das 14h as 22h", 
@@ -91,7 +96,7 @@ val vagaDescricao = listOf(
         tipoContrato = "CLT",
         salario = "R$ 1.600/mês",
         descricao = listOf(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nec tortor in lectus cursus luctus et at purus."
+            "Oportunidade para profissional organizado e com boa comunicação para atuar em serviços gerais na região central. "
         ),
         requisitos = listOf(
             "Experiência na função",
@@ -165,3 +170,6 @@ val vagaDescricao = listOf(
         )
     )
 )
+
+
+var vagasSalvas = mutableListOf<Int>()
